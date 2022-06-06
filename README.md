@@ -9,8 +9,8 @@ git hooks only run when they are
 
 The pre-push hook in this repo doesn't do anything except call another script
 to perform an action. It is likely that any new hooks added here will use the
-same pattern. This is structure is probably overkill since I don't use hooks
-much, but it may have some benefits:
+same pattern. This structure is probably overkill since I don't use hooks much,
+but it may have some benefits:
 - maintenance is slightly easier because we can easily turn on and off specific
   functionality if a hook does more than one thing
 - debugging is easier since we can run the script that does the actual work
