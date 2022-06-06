@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Reject the push if all files changed reside within a specific directory and
+# the branch name does not start with "docs"
+
+range="$(git merge-base origin/master HEAD)..HEAD"
+files="$(git show --pretty="format:" --name-only $range)"
+
+total_changed=$(echo "$files" | sed '/^\s*$/d' | wc -l)
+docs_changed=$(echo "$files" | grep "^test/docs/" | sed '/^\s*$/d' | wc -l)
+
+branch=$(git branch --show-current)
+
+if [[ $total_changed -gt 0 ]] && [[ $total_changed -eq $docs_changed ]] && [[ ! "$branch" =~ ^docs ]]; then
+  echo "Error: Only doc updates detected, prefix branch with \"docs\" and try again"
+  echo
+  echo "    git checkout -b docs/$branch && git push --set-upstream origin docs/$branch"
+  echo
+  echo "To push the current branch and skip the pre-push hook, use"
+  echo
+  echo "    git push --no-verify --set-upstream origin $branch"
+  echo
+
+  exit 1
+fi
+
+exit 0
